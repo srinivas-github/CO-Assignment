@@ -15,7 +15,7 @@
 const int MAX_RECV_LEN = 8096;
 const int MAX_MSG_LEN = 1024;
 const int PORTNUM = 1200;
-
+const int max_clients = 100;
 /**
  * Socket base class 
  */
@@ -95,7 +95,7 @@ public:
      * constructor, therefore, the next necessary call should be setSocketId()
      * using this newly generated socket fd
      */
-     myTcpSocket() {};
+     myTcpSocket();
      ~myTcpSocket() {};
 
      // Constructor.  Used to create a new TCP socket given a port
@@ -131,14 +131,14 @@ public:
      // connect to the server, a client call
      virtual void connectToServer(string&,hostType);
 
-private:
+     //Handle multiple client sockets with select 
+     void handleWithSelect();
 
-     void detectErrorBind(int*,string&);
-     void detectErrorSend(int*,string&);
-     void detectErrorRecv(int*,string&);
-     void detectErrorConnect(int*,string&);
-     void detectErrorAccept(int*,string&);
-     void detectErrorListen(int*,string&);
+private:
+     int client_socket[100];
+     fd_set readfds;
+     int max_sd;
+  
 
 };
 
